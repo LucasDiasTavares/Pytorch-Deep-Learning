@@ -1,6 +1,7 @@
 ### Pytorch Basics
 
 - **Tensors**
+  - [Tensors Docs](https://pytorch.org/docs/stable/tensors.html)
   - **Tensor is a multidimensional matrix that contains elements of a single type**
   - Reshape
   - Slice
