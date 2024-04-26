@@ -6,7 +6,8 @@
   - Reshape
   - Slice
   - Math Operator
-- **Neural Network**
+- **Neural Network (NN)**
+  - [NN Docs](https://pytorch.org/docs/stable/nn.html)
   - Create Model
   - Load Data
   - Train Neural
