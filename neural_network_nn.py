@@ -30,10 +30,9 @@ class Model(nn.Module):
 
 
 # Manual seed
-random_seed = 41
+random_seed = 32
 torch.manual_seed(random_seed)
 model = Model()
-
 
 path = "nn_data/iris.csv"
 df = pd.read_csv(path)
@@ -94,3 +93,42 @@ plt.ylabel("loss/error")
 plt.xlabel("Epoch")
 plt.title('Graph')
 plt.show()
+
+
+# Testing and Evaluating
+
+# Evaluate Model
+# with torch.no_grad():
+#     y_eval = model.forward(df_without_variety_test)
+#     loss = criterion(y_eval, df_variety_test)
+#     print(loss)
+
+
+# Check if predictions is correct
+correct = 0
+with torch.no_grad():
+    for idx, data in enumerate(df_without_variety_test):
+        y_eval = model.forward(data)
+        # Show result from my code thinks it is correct
+        # 1 - tensor([-5.8771,  4.4629,  6.5155]) - 2 - 2
+        # Inside tensor probability
+        # -5.8771 means Setosa (number 0)
+        # 4.4629 means Versicolor (number 1)
+        # 6.5155 means Virginica (number 2)
+        # Highest number is what flower its choose
+        # First 2 means the number of flower
+        # Second 2 correct number of flower
+        print(f"{idx+1} - {str(y_eval)} - {df_variety_test[idx]} - {y_eval.argmax().item()}")
+
+        if y_eval.argmax().item() == df_variety_test[idx]:
+            correct += 1
+
+    print(f"Corrects: {correct}")
+
+
+
+
+
+
+
+
