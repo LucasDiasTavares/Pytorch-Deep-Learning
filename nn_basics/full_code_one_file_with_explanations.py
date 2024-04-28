@@ -1,4 +1,3 @@
-import pdb
 import warnings
 import torch
 import torch.nn as nn
@@ -34,7 +33,7 @@ random_seed = 32
 torch.manual_seed(random_seed)
 model = Model()
 
-path = "nn_basics/nn_data/"
+path = "nn_data/"
 file_name = "iris.csv"
 df = pd.read_csv(path+file_name)
 
@@ -98,31 +97,31 @@ plt.show()
 # Testing and Evaluating
 
 # Evaluate Model
-# with torch.no_grad():
-#     y_eval = model.forward(df_without_variety_test)
-#     loss = criterion(y_eval, df_variety_test)
-#     print(loss)
+with torch.no_grad():
+    y_eval = model.forward(df_without_variety_test)
+    loss = criterion(y_eval, df_variety_test)
+    print(loss)
 
 # Check if predictions is correct
-# correct = 0
-# with torch.no_grad():
-#     for idx, data in enumerate(df_without_variety_test):
-#         y_eval = model.forward(data)
-#         # Show result from my code thinks it is correct
-#         # 1 - tensor([-5.8771,  4.4629,  6.5155]) - 2 - 2
-#         # Inside tensor probability
-#         # -5.8771 means Setosa (number 0)
-#         # 4.4629 means Versicolor (number 1)
-#         # 6.5155 means Virginica (number 2)
-#         # Highest number is what flower its choose
-#         # First 2 means the number of flower
-#         # Second 2 correct number of flower
-#         print(f"{idx + 1} - {str(y_eval)} - {df_variety_test[idx]} - {y_eval.argmax().item()}")
-#
-#         if y_eval.argmax().item() == df_variety_test[idx]:
-#             correct += 1
-#
-#     print(f"Corrects: {correct}")
+correct = 0
+with torch.no_grad():
+    for idx, data in enumerate(df_without_variety_test):
+        y_eval = model.forward(data)
+        # Show result from my code thinks it is correct
+        # 1 - tensor([-5.8771,  4.4629,  6.5155]) - 2 - 2
+        # Inside tensor probability
+        # -5.8771 means Setosa (number 0)
+        # 4.4629 means Versicolor (number 1)
+        # 6.5155 means Virginica (number 2)
+        # Highest number is what flower its choose
+        # First 2 means the number of flower
+        # Second 2 correct number of flower
+        print(f"{idx + 1} - {str(y_eval)} - {df_variety_test[idx]} - {y_eval.argmax().item()}")
+
+        if y_eval.argmax().item() == df_variety_test[idx]:
+            correct += 1
+
+    print(f"Corrects: {correct}")
 
 # Add New Data
 # 6.2,3.4,5.4,2.3,"Virginica"
@@ -130,12 +129,12 @@ plt.show()
 # Versicolor == 1
 # Virginica == 2
 
-# new_data = torch.tensor([6.2, 3.4, 5.4, 2.3])
-# with torch.no_grad():
-#     #           0         1         2
-#     # tensor([-8.5095,  2.0114,  6.6947])
-#     # code thinks its number 2 and it's correct!
-#     print(model(new_data))
+new_data = torch.tensor([6.2, 3.4, 5.4, 2.3])
+with torch.no_grad():
+    #           0         1         2
+    # tensor([-8.5095,  2.0114,  6.6947])
+    # code thinks its number 2 and it's correct!
+    print(f"New Data: {model(new_data)}")
 
 
 # Save Model

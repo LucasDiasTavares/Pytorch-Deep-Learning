@@ -14,6 +14,7 @@
   - Evaluate Test Data
   - Evaluate New Data
   - Save and Load
+- **Convolutional Neural Network (CNN)** 
   - Convolutional Basics
   - Image Filter / Image Kernel
   - Convolutional Layer and RGB
