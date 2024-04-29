@@ -19,7 +19,7 @@
   - Image Filter / Image Kernel
   - Convolutional Layer and RGB
   - Convolutional Neural
-  - MNIST Images
+  - [MNIST Images](https://www.tensorflow.org/datasets/catalog/mnist?hl=pt-br)
   - Convolutional and Pooling Layers
   - Train and Test CNN Model
   - Graph CNN
