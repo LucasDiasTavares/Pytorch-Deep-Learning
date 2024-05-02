@@ -3,6 +3,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import DataLoader  # https://pytorch.org/tutorials/beginner/basics/data_tutorial.html
 from torchvision import datasets, transforms
+from torchvision.transforms import ToTensor
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from decouple import config
+from sklearn.metrics import confusion_matrix
 from utils import create_cnn_data_folder
 
 cnn_data = create_cnn_data_folder()
@@ -50,7 +56,6 @@ model = Model()
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
-
 # Train and Test
 import time
 
@@ -96,8 +101,54 @@ for epo in range(epochs):
     test_losses.append(loss)
     test_correct.append(test_crt)
 
-
 current = time.time()
 total = current - start
 print(f"Training `{total / 60} minutes")
 # Train and Test
+
+# Graph Loss
+train_losses = [tl.item() for tl in train_losses]
+plt.plot(train_losses, label="Training")
+plt.plot(test_losses, label="Validation")
+plt.title("Loss")
+plt.legend()
+plt.show()
+
+# Graph Accuracy
+plt.plot([t / 600 for t in train_correct], label="Training")
+plt.plot([t / 100 for t in test_correct], label="Validation")
+plt.title("Accuracy")
+plt.legend()
+plt.show()
+
+test_load_everything = DataLoader(test_data, batch_size=10000, shuffle=False)
+
+with torch.no_grad():
+    correct = 0
+    for X_test, y_test in test_load_everything:
+        y_val = model(X_test)
+        predicted = torch.max(y_val, 1)[1]
+        correct += (predicted == y_test).sum()
+        print(correct.item() / len(test_data) * 100)
+
+# Grab an image
+# test_data[1978]
+
+# Grab data inside image
+# test_data[1978][0]
+
+# Reshape it
+# test_data[1978][0].reshape(28, 28)
+
+# Show the image number 4
+plt.imshow(test_data[1978][0].reshape(28, 28))
+plt.show()
+
+# Pass the image thru our model
+model.eval()
+with torch.no_grad():
+    new_prediction = model(test_data[1978][0].view(1, 1, 28, 28))
+
+# tensor(4)
+print(new_prediction.argmax())
+
