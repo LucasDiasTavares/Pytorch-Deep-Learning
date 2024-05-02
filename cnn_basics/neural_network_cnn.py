@@ -129,7 +129,8 @@ with torch.no_grad():
         y_val = model(X_test)
         predicted = torch.max(y_val, 1)[1]
         correct += (predicted == y_test).sum()
-        print(correct.item() / len(test_data) * 100)
+    # 98.68%
+    print(f"Percent of correct: {correct.item() / len(test_data) * 100}%")
 
 # Grab an image
 # test_data[1978]
