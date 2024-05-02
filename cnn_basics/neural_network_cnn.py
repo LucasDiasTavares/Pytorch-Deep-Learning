@@ -1,4 +1,3 @@
-import pdb
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -24,7 +23,7 @@ class Model(nn.Module):
         super().__init__()
         self.conv1 = nn.Conv2d(1, 6, 3, 1)
         self.conv2 = nn.Conv2d(6, 16, 3, 1)
-        self.fc1 = nn.Linear(5*5*16, 120)
+        self.fc1 = nn.Linear(5 * 5 * 16, 120)
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, 10)
 
@@ -34,7 +33,7 @@ class Model(nn.Module):
         data = F.relu(self.conv2(data))
         data = F.max_pool2d(data, 2, 2)
 
-        data = data.view(-1, 5*5*16)
+        data = data.view(-1, 5 * 5 * 16)
 
         data = F.relu(self.fc1(data))
         data = F.relu(self.fc2(data))
@@ -52,20 +51,53 @@ criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
 
+# Train and Test
+import time
+
+# Training `1.3544928352038066 minutes
+start = time.time()
+
+epochs = 5
+train_losses = []
+test_losses = []
+train_correct = []
+test_correct = []
+
+for epo in range(epochs):
+    train_crt = 0
+    test_crt = 0
+
+    for idx, (x_train, y_train) in enumerate(train_loader):
+        idx += 1
+        y_pred = model(x_train)  # predict from training 2D
+        loss = criterion(y_pred, y_train)  # compare predictions
+
+        predicted = torch.max(y_pred.data, 1)[1]
+        batch_correct = (predicted == y_train).sum()
+        train_crt += batch_correct
+
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+        if idx % 600 == 0:
+            print(f"Epoch: {epo} - Batch: {idx} - Loss: {loss.item()}")
+
+    train_losses.append(loss)
+    train_correct.append(train_crt)
+
+    with torch.no_grad():
+        for b, (x_test, y_test) in enumerate(test_loader):
+            y_val = model(x_test)
+            predicted = torch.max(y_val.data, 1)[1]
+            test_crt += (predicted == y_test).sum()
+
+    loss = criterion(y_val, y_test)
+    test_losses.append(loss)
+    test_correct.append(test_crt)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+current = time.time()
+total = current - start
+print(f"Training `{total / 60} minutes")
+# Train and Test
